@@ -21,7 +21,7 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'fd 9/4/2023 21:57:49'!
+!CustomerBookTest methodsFor: 'assertions' stamp: 'fd 9/4/2023 21:57:49'!
 assertThat: aTestBlock errorsOn: anExpectedErrorClass andThenDo: aVerificationBlock
 	
 	[ 
@@ -32,14 +32,14 @@ assertThat: aTestBlock errorsOn: anExpectedErrorClass andThenDo: aVerificationBl
 		do: aVerificationBlock.
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'fd 9/4/2023 21:53:45'!
+!CustomerBookTest methodsFor: 'assertions' stamp: 'fd 9/4/2023 21:53:45'!
 assertThat: aCustomerBook numberOfActiveCustomersEquals: aNumberOfActiveCustomers andNumberOfSuspendedCustomersEquals: aNumberOfSuspendedCustomers andNumberOfCustomersEquals: aNumberOfCustomers 
 	
 	self assert: aNumberOfActiveCustomers equals: aCustomerBook numberOfActiveCustomers.
 	self assert: aNumberOfSuspendedCustomers equals: aCustomerBook numberOfSuspendedCustomers.
 	self assert: aNumberOfCustomers equals: aCustomerBook numberOfCustomers.! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'fd 9/4/2023 21:28:48'!
+!CustomerBookTest methodsFor: 'assertions' stamp: 'fd 9/4/2023 21:28:48'!
 assertThat: aBlock runsInLessThan: aTimeLimit
 
 	| millisecondsAfterRunning millisecondsBeforeRunning |
@@ -50,7 +50,8 @@ assertThat: aBlock runsInLessThan: aTimeLimit
 	
 	self assert: (millisecondsAfterRunning-millisecondsBeforeRunning) < aTimeLimit.! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'fd 9/4/2023 21:45:33'!
+
+!CustomerBookTest methodsFor: 'setUp/tearDown' stamp: 'fd 9/4/2023 21:45:33'!
 setUp
 	firstCustomer := 'Paul McCartney'.
 	secondCustomer := 'John Lennon'.
@@ -69,6 +70,7 @@ setUp
 		customerBook suspendCustomerNamed: firstCustomer.
 		customerBook. ] value.
 	! !
+
 
 !CustomerBookTest methodsFor: 'testing' stamp: 'fd 9/4/2023 21:43:57'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
@@ -195,24 +197,6 @@ Object subclass: #CustomerBook
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
-!CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
-includesCustomerNamed: aName
-
-	^(active includes: aName) or: [ suspended includes: aName ]! !
-
-!CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
-isEmpty
-	
-	^active isEmpty and: [ suspended isEmpty ]! !
-
-
-!CustomerBook methodsFor: 'initialization' stamp: 'NR 9/17/2020 07:23:04'!
-initialize
-
-	active := OrderedCollection new.
-	suspended:= OrderedCollection new.! !
-
-
 !CustomerBook methodsFor: 'customer management' stamp: 'NR 4/3/2019 10:14:26'!
 addCustomerNamed: aName
 
@@ -278,6 +262,24 @@ suspendCustomerNamed: aName
 	
 	suspended add: aName
 ! !
+
+
+!CustomerBook methodsFor: 'initialization' stamp: 'NR 9/17/2020 07:23:04'!
+initialize
+
+	active := OrderedCollection new.
+	suspended:= OrderedCollection new.! !
+
+
+!CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
+includesCustomerNamed: aName
+
+	^(active includes: aName) or: [ suspended includes: aName ]! !
+
+!CustomerBook methodsFor: 'testing' stamp: 'NR 4/3/2019 10:14:26'!
+isEmpty
+	
+	^active isEmpty and: [ suspended isEmpty ]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
