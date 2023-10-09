@@ -1,0 +1,1946 @@
+
+
+----QUIT----(20 March 2023 11:15:29) CuisUniversity-5706.image priorSource: 4313282!
+
+----STARTUP---- (20 March 2023 11:15:29) as /Users/hernan/Documents/Cuis/5.0-64Bits/Cuis-University-Installer/CuisUniversity-5706.image!
+
+
+----QUIT----(20 March 2023 11:15:30) CuisUniversity-5706.image priorSource: 8712809!
+
+----STARTUP---- (12 May 2023 18:40:55) as /home/fd/fd/uba/ing1/dl/linux64/CuisUniversity-5706.image!
+
+
+----End fileIn of /home/fd/ing1/files/custom.st----!
+
+----End fileIn of /home/fd/ing1/files/fdrepl.st----!
+
+----QUIT----(12 May 2023 18:40:55) CuisUniversity-5706.image priorSource: 8713034!
+
+----STARTUP---- (12 May 2023 18:40:55) as /home/fd/fd/uba/ing1/dl/linux64/CuisUniversity-5706.image!
+
+
+----End fileIn of /home/fd/ing1/23c1-ingsoft1/05-MarsRover/MarsRover.st----!
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:41:11'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:46:33' prior: 50604586!
+processCommands: commands 
+	commands = '' ifTrue: [^self].
+	
+	commands do: [:command |
+		"stop processing comands when reading an invalid one"
+		(#($f $b $l $r) includes: command) ifFalse: [^self].
+		
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	
+
+	].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:48:01' prior: 50604712!
+processCommands: commands 
+	| commandHandlers |
+	commands = '' ifTrue: [^self].
+	
+	commandHandlers := {
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.
+	
+	commands do: [:command |
+		"stop processing comands when reading an invalid one"
+		(#($f $b $l $r) includes: command) ifFalse: [^self].
+	
+
+	].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:49:37' prior: 50604730!
+processCommands: commands 
+	| commandHandlers |
+
+	commandHandlers := {
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.
+	
+	commands do: [:command |
+		| handler |
+		handler := commandHandlers 
+			at: command 
+			ifAbsent: [^self]. "stop processing comands when reading an unknown one"
+		handler value.
+	].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:49:39'!
+PASSED!
+
+!classDefinition: #MarsRover category: 'MarsRover' stamp: 'fd 5/12/2023 18:50:54'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'direction position commandHandlersXD'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 18:50:53' prior: 50604606!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.
+	
+	commandHandlersXD := {
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:51:07' prior: 50604750!
+processCommands: commands 
+	
+	commands do: [:command |
+		| handler |
+		handler := commandHandlersXD
+			at: command 
+			ifAbsent: [^self]. "stop processing comands when reading an unknown one"
+		handler value.
+	].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:51:25' prior: 50604875!
+processCommands: commands 
+	
+	commands do: [:command |
+		| handler |
+		handler := commandHandlersXD 	at: command 
+								      ifAbsent: [^self]. "stop processing comands when reading an unknown one"
+		handler value.
+	].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:51:27'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:52:31' prior: 50604885!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handler := commandHandlersXD 	at: command ifAbsent: [^self]. 
+		
+		handler value.
+	].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:52:38' prior: 50604976!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handler := commandHandlersXD 	at: command ifAbsent: [^self]. 
+		
+		handler value.	].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:52:39'!
+PASSED!
+
+!classDefinition: #MarsRover category: 'MarsRover' stamp: 'fd 5/12/2023 18:52:47'!
+Object subclass: #MarsRover
+	instanceVariableNames: 'direction position commandHandlers'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'fd 5/12/2023 18:52:47' prior: 50604987!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handler := commandHandlers 	at: command ifAbsent: [^self]. 
+		
+		handler value.	].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'as yet unclassified' stamp: 'fd 5/12/2023 18:52:47' prior: 50604859!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.
+	
+	commandHandlers := {
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.! !
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 18:53:22' prior: 50605098!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.! !
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 18:54:08' prior: 50605114!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.
+	
+	commandHandlers := {
+		$f  ->		[position  			:= direction nextPointForwardFrom: position ].
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:54:10'!
+PASSED!
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 18:54:33' prior: 50605121!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.
+	
+	commandHandlers := {
+		$b ->		[position  			:= direction nextPointBackwardFrom: position ].
+		$l  ->		[direction  			:= direction rotatedLeft90Degrees ].
+		$r  ->		[direction  			:= direction rotatedRight90Degrees ].
+	} asDictionary.! !
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 18:55:12'!
+handleCommandF
+	position := direction nextPointForwardFrom: position.! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:57:03' prior: 50605087!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := #handleCommand , (command asUppercase asSymbol).
+		handler := self class compiledMethodAt:  handlerName ifAbsent: 	[^self]. 
+
+		handler value.	].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 18:57:05'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 18:57:05'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 18:57:05'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 18:57:05'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 18:57:07'!
+FAILURE!
+
+self class!
+
+self class compiledMethodAt: #handleCommandF!
+
+self class compiledMethodAt: #handleCommandF!
+
+self class compiledMethodAt: #handleCommandF class!
+
+self class compiledMethodAt: #handleCommandF ::class!
+
+self class compiledMethodAt: #handleCommandF!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 18:59:59' prior: 50605237!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := #handleCommand , (command asUppercase asSymbol).
+		handler := self class compiledMethodAt:  handlerName ifAbsent: 	[^self]. 
+
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:00:03'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:00:03'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:00:03'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:00:03'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:00:39' prior: 50605344!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := #handleCommand , (command asUppercase asSymbol).
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		self halt.
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:00:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:00:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:00:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:00:40'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:00:42'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:01:07' prior: 50605440!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := #handleCommand , (command asUppercase asSymbol).
+		self halt.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:01:10' prior: 50605540!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := #handleCommand , (command asUppercase asSymbol).
+		self break.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:01:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:01:11'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:01:11'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:01:38' prior: 50605555!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := (#handleCommand , (command asUppercase)) asSymbol.
+		self break.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:01:40' prior: 50605581!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := (#handleCommand , (command asUppercase)) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:01:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:01:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:01:40'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:01:40'!
+ERROR!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:01:53' prior: 50605597!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := (#handleCommand , (command asUppercase)) asSymbol.
+		self break.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:01:54'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:01:54'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:01:54'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:01:54'!
+ERROR!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:01:56'!
+ERROR!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:02:08' prior: 50605692!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := (#handleCommand , (command asUppercase asSymbol)) asSymbol.
+		self break.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:02:09'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:02:09'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:02:09'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:20'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:02:26' prior: 50605791!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := (#handleCommand , (command asUppercase asSymbol)) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:28'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:28'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:02:49' prior: 50605821!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := ('handleCommand' , (command asUppercase)) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:02:50'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:02:50'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:02:50'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:50'!
+ERROR!
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:02:59'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:02:59'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:02:59'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:02:59'!
+ERROR!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:01'!
+ERROR!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:03:17' prior: 50605917!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := ('handleCommand' , (command asString asUppercase)) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:17'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:18'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:18'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:18'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:18'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:03:18'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:03:18'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:03:18'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:03:25' prior: 50606096!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := ('handleCommand' , (command asUppercase asString )) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:03:26' prior: 50606192!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:03:26'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:03:26'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:03:45' prior: 50606207!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		
+		handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:03:48' prior: 50606303!
+processCommands: commands 
+	commands do: [:command |
+	 	| handler handlerName |
+		
+		handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+		
+		"the block for ifAbsent: will stop processing comands when reading an unknown command"
+		handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+		
+		handler valueWithReceiver: self arguments: #(). ].
+	
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'initialization' stamp: 'fd 5/12/2023 19:04:01' prior: 50605218!
+initializeWithPosition: aPosition andDirection: aDirection
+	position := aPosition.
+	direction := aDirection.
+! !
+!MarsRover methodsFor: 'command handers' stamp: 'fd 5/12/2023 19:04:15'!
+handleCommandB
+	position := direction nextPointBackwardFrom: position.
+		! !
+!MarsRover methodsFor: 'command handers' stamp: 'fd 5/12/2023 19:04:27'!
+handleCommandL
+	direction := direction rotatedLeft90Degrees.! !
+!MarsRover methodsFor: 'command handers' stamp: 'fd 5/12/2023 19:04:32'!
+handleCommandR
+	direction := direction rotatedRight90Degrees.
+	
+	! !
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:04:38'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:05:16' prior: 50606319!
+processCommands: commands 
+	commands do: [:command |
+	 	
+		self handleCommand: command.]
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:05:23' prior: 50606430!
+processCommands: commands 
+	commands do: [:command |
+		self handleCommand: command.]
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:05:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:05:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:05:24'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:05:24'!
+ERROR!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:05:26'!
+ERROR!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:05:30'!
+handleCommand: command 
+	self shouldBeImplemented.! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:05:48' prior: 50606525!
+handleCommand: command 
+	| handler handlerName |
+	handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+
+	"the block for ifAbsent: will stop processing comands when reading an unknown command"
+	handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+
+	handler valueWithReceiver: self arguments: #().
+! !
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:17'!
+PASSED!
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:06:19'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:06:19'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:06:19'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:06:29'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:06:29'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:06:29'!
+FAILURE!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:06:31'!
+FAILURE!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:07:46' prior: 50606436!
+processCommands: commands 
+	commands do: [:command |
+		self handleCommand: command ifInvalid:[^self].
+	]
+	
+	
+	
+	! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:08:07'!
+handleCommand: command ifInvalid: invalidCallback
+	| handler handlerName |
+	handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+
+	"the block for ifAbsent: will stop processing comands when reading an unknown command"
+	handler := self class compiledMethodAt: handlerName ifAbsent: invalidCallback. 
+
+	handler valueWithReceiver: self arguments: #().
+! !
+
+!methodRemoval: MarsRover #handleCommand: stamp: 'fd 5/12/2023 19:08:09'!
+handleCommand: command 
+	| handler handlerName |
+	handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+
+	"the block for ifAbsent: will stop processing comands when reading an unknown command"
+	handler := self class compiledMethodAt: handlerName ifAbsent: 	[^self]. 
+
+	handler valueWithReceiver: self arguments: #().
+!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:08:19' prior: 50606713!
+processCommands: commands 
+	commands do: [:command |
+		self handleCommand: command ifInvalid: [^self].
+	]
+	
+	
+	
+	! !
+
+!testRun: #MarsRoverTest #test01MarsRoverStartsOnInitializedPosition stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test02MarsRoverStartsOnInitializedDirection stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test03MarsRoverDoesNotMoveOnEmptySetOfCommands stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test04MarsRoverMovesForwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test05MarsRoverMovesBackwardOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test06MarsRoverRotatesLeftOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test07MarsRoverRotatesRightOnCommandWhenFacingNorth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test08MarsRoverMovesForwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test09MarsRoverMovesBackwardOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test10MarsRoverRotatesLeftOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test11MarsRoverRotatesRightOnCommandWhenFacingEast stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test12MarsRoverMovesForwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test13MarsRoverMovesBackwardOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test14MarsRoverRotatesLeftOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test15MarsRoverRotatesRightOnCommandWhenFacingWest stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test16MarsRoverMovesForwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test17MarsRoverMovesBackwardOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test18MarsRoverRotatesLeftOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test19MarsRoverRotatesRightOnCommandWhenFacingSouth stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test20MarsRoverMovesForwardTwice stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+
+!testRun: #MarsRoverTest #test21MarsRoverMovesForwardOnlyTwiceOnUnexpectedCommand stamp: 'fd 5/12/2023 19:08:20'!
+PASSED!
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:09:02' prior: 50606719!
+handleCommand: command ifInvalid: invalidCallbackBlock
+	| handler handlerName |
+	handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+
+	handler := self class compiledMethodAt: handlerName ifAbsent: invalidCallbackBlock. 
+
+	handler valueWithReceiver: self arguments: #().
+! !
+!MarsRover methodsFor: 'processing' stamp: 'fd 5/12/2023 19:09:17' prior: 50606834!
+handleCommand: command ifInvalid: invalidCallbackBlock
+	| handler handlerName |
+	handlerName := ('handleCommand' , (command asUppercase asString)) asSymbol.
+
+	handler := self class compiledMethodAt: handlerName ifAbsent: [^invalidCallbackBlock value]. 
+
+	handler valueWithReceiver: self arguments: #().
+! !
+
+----SNAPSHOT----(12 May 2023 19:09:34) CuisUniversity-5706.image priorSource: 8721206!
